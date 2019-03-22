@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="info">
+
+    <Properties>
+        <Property name="log_dir">./logs</Property>
+        <Property name="export_log_file">${log_dir}/export.log</Property>
+        <Property name="fail_log_file">${log_dir}/fail.log</Property>
+
+        <Property name="request_log_dir">${log_dir}/requestLog</Property>
+        <Property name="request_log_file">${request_log_dir}/request.log</Property>
+
+        <Property name="response_log_dir">${log_dir}/responseLog</Property>
+        <Property name="response_log_file">${response_log_dir}/response.log</Property>
+
+        <Property name="result">${response_log_dir}/result.log</Property>
+    </Properties>
+
+    <appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+        <RollingFile name="requestLog" fileName="${request_log_file}"
+                     filePattern="${request_log_dir}/request-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout pattern="%msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="1000 MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="1000"/>
+        </RollingFile>
+        <RollingFile name="responseLog" fileName="${response_log_file}"
+                     filePattern="${response_log_dir}/response-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout pattern="%msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="1000 MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="1000"/>
+        </RollingFile>
+
+        <RollingFile name="exportLog" fileName="${export_log_file}"
+                     filePattern="./export-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout pattern="%d{ISO8601} [%t] %-5level %logger{36} - %msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="1000 MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="1000"/>
+        </RollingFile>
+
+        <RollingFile name="failLog" fileName="${fail_log_file}"
+                     filePattern="./fail-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout pattern="%d{ISO8601} [%t] %-5level %logger{36} - %msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="1000 MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="1000"/>
+        </RollingFile>
+
+    </appenders>
+
+    <loggers>
+        <Root level="info">
+            <AppenderRef ref="exportLog"/>
+            <AppenderRef ref="Console"/>
+        </Root>
+
+        <logger name="RequestLog" level="info" additivity="false">
+            <appender-ref ref="requestLog"/>
+        </logger>
+
+        <logger name="ResponseLog" level="info" additivity="false">
+            <appender-ref ref="responseLog"/>
+        </logger>
+
+        <logger name="runningLog" level="info" additivity="false">
+            <appender-ref ref="exportLog"/>
+        </logger>
+
+        <logger name="failLog" level="info" additivity="false">
+            <appender-ref ref="failLog"/>
+        </logger>
+
+    </loggers>
+
+</configuration>
